@@ -32,10 +32,10 @@ def generar_hash_password(password_plana: str) -> str:
 
 @app.get("/encrS/{text}")
 def verificar_password(nombre:str, password:str) -> bool:
-    eejj = {nombre:"Leonel", password:"$2b$12$jw4J87F2GfKMxx6pU75oxuDJxnsO19/9e2BfrG/16Z2Xat1JeZlMW"}
+    eejj = {nombre:"Leonel", password:"$2b$12$MS5I.mIRh6yHo7K/WbFr1u.xH.ScCHNHbTbfqhfR6pZkTM/W6nyHu"}
     # Convertimos ambos a bytes para la comparación
     pIngresada_bytes = password_ingresada.encode('utf-8')
     password_bytes = password.encode('utf-8')
     
     # bcrypt.checkpw detecta automáticamente el salt dentro del hash
-    return bcrypt.checkpw(ingresada_bytes, almacenado_bytes)
+    return bcrypt.checkpw(pIngresada_bytes, password_bytes)
