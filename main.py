@@ -35,7 +35,7 @@ def verificar_password(nombre:str, passwordI:str) -> bool:
     eejj = {nombre:"Leonel", password:"$2b$12$MS5I.mIRh6yHo7K/WbFr1u.xH.ScCHNHbTbfqhfR6pZkTM/W6nyHu"}
     # Convertimos ambos a bytes para la comparación
     pIngresada_bytes = passwordI.encode('utf-8')
-    password_bytes = password.encode('utf-8')
+    password_bytes = eejj["password"].encode('utf-8')
     
     # bcrypt.checkpw detecta automáticamente el salt dentro del hash
     return bcrypt.checkpw(pIngresada_bytes, password_bytes)
