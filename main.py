@@ -26,7 +26,9 @@ async def verificar_password(datos: LoginRequest):
     try:
         usuario_db = {
             "nombre": "Leonel", 
-            "password_hash": "$2b$12$MS5I.mIRh6yHo7K/WbFr1u.xH.ScCHNHbTbfqhfR6pZkTM/W6nyHu"
+            "password_hash": "$2b$12$MS5I.mIRh6yHo7K/WbFr1u.xH.ScCHNHbTbfqhfR6pZkTM/W6nyHu",
+            "rol": "Admin",
+            "plan": "Premium",
         }
 
         # 1. Validar nombre (comparamos con datos.username ahora)
