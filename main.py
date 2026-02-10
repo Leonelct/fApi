@@ -30,25 +30,17 @@ def generar_hash_password(password_plana: str) -> str:
 @app.get("/verificar")
 def verificar_password(nombre: str, passwordI: str):
     try:
-        # 1. Definimos el usuario 'real' con llaves de texto fijas
-        # El hash que proporcionaste es el valor de la contraseña
         usuario_db = {
             "nombre": "Leonel", 
             "password_hash": "$2b$12$MS5I.mIRh6yHo7K/WbFr1u.xH.ScCHNHbTbfqhfR6pZkTM/W6nyHu"
         }
 
-        # 2. Verificamos si el nombre coincide primero
         if nombre != usuario_db["nombre"]:
             return {"autenticado": False, "mensaje": "Usuario no encontrado"}
 
-        # 3. Convertimos a bytes (CRUCIAL para que no de error 500)
-        # La contraseña que viene del usuario (.jsx)
         p_ingresada_bytes = passwordI.encode('utf-8')
-        # El hash que tenemos guardado en nuestro diccionario
         p_hash_db_bytes = usuario_db["password_hash"].encode('utf-8')
 
-        # 4. Comparación con bcrypt
-        # checkpw devuelve True si coinciden, False si no.
         coincide = bcrypt.checkpw(p_ingresada_bytes, p_hash_db_bytes)
 
         return {
@@ -57,6 +49,5 @@ def verificar_password(nombre: str, passwordI: str):
         }
 
     except Exception as e:
-        # Si algo falla internamente, lo verás en tu consola de Python
         print(f"Error detectado: {e}")
         raise HTTPException(status_code=500, detail=str(e))
