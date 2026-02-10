@@ -27,27 +27,36 @@ def generar_hash_password(password_plana: str) -> str:
     # Retornamos como string para guardarlo fácilmente en la DB (columna password_hash)
     return hash_resultado.decode('utf-8')
 
-@app.get("/verificar")
-def verificar_password(nombre: str, passwordI: str):
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import bcrypt
+
+app = FastAPI()
+
+# Definimos qué datos esperamos recibir en el cuerpo de la petición
+class LoginRequest(BaseModel):
+    nombre: str
+    passwordI: str
+
+@app.post("/verificar")
+async def verificar_password(datos: LoginRequest):
     try:
         usuario_db = {
             "nombre": "Leonel", 
             "password_hash": "$2b$12$MS5I.mIRh6yHo7K/WbFr1u.xH.ScCHNHbTbfqhfR6pZkTM/W6nyHu"
         }
 
-        if nombre != usuario_db["nombre"]:
+        # Accedemos a los datos a través del objeto 'datos'
+        if datos.nombre != usuario_db["nombre"]:
             return {"autenticado": False, "mensaje": "Usuario no encontrado"}
 
-        p_ingresada_bytes = passwordI.encode('utf-8')
+        # Verificación con bcrypt
+        p_ingresada_bytes = datos.passwordI.encode('utf-8')
         p_hash_db_bytes = usuario_db["password_hash"].encode('utf-8')
 
         coincide = bcrypt.checkpw(p_ingresada_bytes, p_hash_db_bytes)
 
-        return {
-            "usuario": nombre,
-            "autenticado": coincide
-        }
+        return {"usuario": datos.nombre, "autenticado": coincide}
 
     except Exception as e:
-        print(f"Error detectado: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Error interno")
