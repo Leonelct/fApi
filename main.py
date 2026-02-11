@@ -25,7 +25,7 @@ usuarios_db = {
         "status": "Activo"
     },
     "Invitado": {
-        "password_hash": "$2b$12$...", # Hash real aquí
+        "password_hash": "$2b$12$MS5I.mIRh6yHo7K/WbFr1u.xH.ScCHNHbTbfqhfR6pZkTM/W6nyHu", # Hash real aquí
         "rol": "Usuario",
         "plan": "Básico",
         "status": "Limitado"
