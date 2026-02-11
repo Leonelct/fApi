@@ -5,7 +5,6 @@ import bcrypt
 
 app = FastAPI()
 
-# --- CONFIGURACIÓN DE CORS CORREGIDA ---
 app.add_middleware(
     CORSMiddleware,
     # ELIMINADA LA BARRA FINAL: 'http://localhost:5173' en lugar de 'http://localhost:5173/'
@@ -15,7 +14,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- MODELO CORREGIDO ---
 # Debe coincidir con las llaves que envías en el JSON de React
 class LoginRequest(BaseModel):
     username: str # Antes era 'nombre'
@@ -51,3 +49,22 @@ async def verificar_password(datos: LoginRequest):
     except Exception as e:
         print(f"Error: {e}")
         raise HTTPException(status_code=500, detail="Error interno del servidor")
+
+@app.get("/perfil/{username}")
+async def obtener_perfil(username: str):
+    # En el futuro, aquí buscarías en SQL. Por ahora simulamos la DB:
+    usuarios_db = {
+        "Leonel": {"rol": "Administrador", "plan": "Empresarial", "status": "Activo"},
+        "Invitado": {"rol": "Usuario", "plan": "Básico", "status": "Limitado"}
+    }
+    
+    perfil = usuarios_db.get(username)
+    if not perfil:
+        raise HTTPException(status_code=404, detail="Perfil no encontrado")
+    
+    return {
+        "username": username,
+        "rol": perfil["rol"],
+        "plan": perfil["plan"],
+        "status": perfil["status"]
+    }
